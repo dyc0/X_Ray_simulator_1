@@ -1,8 +1,6 @@
 #ifndef UTILITES_HPP
 #define UTILITES_HPP
 
-#include <math.h>
-
 namespace xru
 {
 
@@ -17,11 +15,15 @@ namespace xru
         double dot(const Vector3D &other) const;
         double euclidian_distance(const Vector3D &other) const;
 
-        Vector3D operator - (Vector3D const &other);
+        Vector3D operator - (Vector3D const &other) const;
 
+        Vector3D normed() const;
+        void norm();
         static double abs(Vector3D const &vec);
     };
-    
+
+    std::ostream& operator<<(std::ostream& out, const Vector3D& o);
+
     // Alias vector as point
     using Point3D = Vector3D;
 
@@ -35,9 +37,7 @@ namespace xru
         double q{0};     // we do need q
     };
 
-    void QuadraticSolver(QuadraticCoef const &coef, double *roots, int &numroots);
-
-
+    void QuadraticSolver(const QuadraticCoef &coef, double *roots, int &numroots);
 
 }
 
