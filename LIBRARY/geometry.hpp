@@ -6,12 +6,11 @@ namespace xrg {
     class Body {
         public:
         Body(const double x, const double y, const double z);
-        virtual double weakening(const double d1, const double d2, const xrt::XRay &ray);
 
-        protected:
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const = 0;
         virtual double weakening(const double path_length) const = 0;
 
+        protected:
         xru::Point3D centre_;
         double coef_; // For weakening
     };
@@ -20,10 +19,10 @@ namespace xrg {
         public:
         Ellipsoid(const double a, const double b, const double c, const double x, const double y, const double z);
 
-        private:
-        xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
+        virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
         virtual double weakening(const double path_length) const override;
 
+        private:
         double a_, b_, c_;
     };
 
@@ -31,10 +30,10 @@ namespace xrg {
         public:
         Sphere(const double r, const double x, const double y, const double z);
 
-        private:
-        xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
+        virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
         virtual double weakening(const double path_length) const override;
 
+        private:
         double r_;
     };
 
@@ -42,10 +41,10 @@ namespace xrg {
         public:
         Cylinder(const double r, const double h, const double x, const double y, const double z);
 
-        private:
-        xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
+        virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
         virtual double weakening(const double path_length) const override;
 
+        private:
         double r_, h_;
     };
 

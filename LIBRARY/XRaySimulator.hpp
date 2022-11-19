@@ -4,6 +4,7 @@
 #include <cassert>
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 #include "utilities.hpp"
 #include "tube.hpp"

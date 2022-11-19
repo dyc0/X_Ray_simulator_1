@@ -7,7 +7,6 @@ int main(int argc, const char* argv[])
 {   
     std::cout << "TESTING" << std::endl;
 
-    std::cout << "Testing constructors" << std::endl;
     Vector3D a;
     Vector3D b(1, 0, 0);
     Vector3D c(0, 1, 0);

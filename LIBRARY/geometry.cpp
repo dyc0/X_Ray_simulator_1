@@ -13,16 +13,9 @@ Ellipsoid::Ellipsoid(const double a, const double b, const double c, const doubl
         assert( (c_!=0) );
     }
 
-xru::QuadraticCoef* Sphere::intersect_coefs(const xrt::XRay &ray) const
+double Ellipsoid::weakening(const double path_length) const
 {
-    // Assume line's direction vector is normalized and non-zero
-    auto delta = ray.o_ - centre_;
-
-    xru::QuadraticCoef* qc = new xru::QuadraticCoef();
-    qc->q = delta.dot(delta) - r_*r_;
-    qc->phalf = ray.d_.dot(delta);
-
-    return qc;
+    return 0;
 }
 
 xru::QuadraticCoef* Ellipsoid::intersect_coefs(const xrt::XRay &ray) const
@@ -42,3 +35,29 @@ xru::QuadraticCoef* Ellipsoid::intersect_coefs(const xrt::XRay &ray) const
 
     return qc;
 }
+
+Sphere::Sphere(const double r, const double x, const double y, const double z):
+    r_(r), Body(x, y, z) { };
+
+xru::QuadraticCoef* Sphere::intersect_coefs(const xrt::XRay &ray) const
+{
+    // Assume line's direction vector is normalized and non-zero
+    auto delta = ray.o_ - centre_;
+
+    xru::QuadraticCoef* qc = new xru::QuadraticCoef();
+    qc->q = delta.dot(delta) - r_*r_;
+    qc->phalf = ray.d_.dot(delta);
+
+    return qc;
+}
+
+double Sphere::weakening(const double path_length) const
+{
+    return 0;
+}
+
+
+Cylinder::Cylinder(const double r, const double h, const double x, const double y, const double z): Body(x, y, z) { };
+
+xru::QuadraticCoef* Cylinder::intersect_coefs(const xrt::XRay &ray) const { return nullptr; };
+double Cylinder::weakening(const double path_length) const { return 0; };
