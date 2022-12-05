@@ -1,11 +1,13 @@
 #ifndef XRAY_SIM_1
 #define XRAY_SIM_1
 
+#include <algorithm>
 #include <cassert>
-#include <math.h>
 #include <iostream>
+#include <math.h>
 #include <vector>
 
+#include "constants.hpp"
 #include "utilities.hpp"
 #include "tube.hpp"
 #include "geometry.hpp"
