@@ -6,6 +6,8 @@ namespace xru {
 
     Vector3D::Vector3D(const double x, const double y, const double z): dx(x), dy(y), dz(z) { };
 
+    Vector3D::Vector3D(const Vector3D& other): dx(other.dx), dy(other.dy), dz(other.dz) { };
+
     Vector3D Vector3D::cross(const Vector3D &other) const
     {
         return Vector3D(dy*other.dz - dz*other.dy, dz*other.dx - dx*other.dz, dx*other.dy - dy*other.dx);
@@ -21,9 +23,24 @@ namespace xru {
         return abs(*this-other);
     }
 
+    Vector3D Vector3D::operator + (Vector3D const &other) const
+    {
+        return Vector3D(dx+other.dx, dy+other.dy, dz+other.dz); 
+    }
+
     Vector3D Vector3D::operator - (Vector3D const &other) const
     {
         return Vector3D(dx-other.dx, dy-other.dy, dz-other.dz); 
+    }
+
+    Vector3D Vector3D::operator * (double const & scalar) const
+    {
+        return Vector3D(dx*scalar, dy*scalar, dz*scalar);
+    }
+
+    Vector3D Vector3D::operator * (double const & scalar) const
+    {
+        return *this * (1/scalar);
     }
 
     Vector3D Vector3D::normed() const

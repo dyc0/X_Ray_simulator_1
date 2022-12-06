@@ -10,12 +10,16 @@ namespace xru
 
         Vector3D();
         Vector3D(const double x, const double y, const double z);
+        Vector3D(const Vector3D& other);
 
         Vector3D cross(const Vector3D &other) const;
         double dot(const Vector3D &other) const;
         double euclidian_distance(const Vector3D &other) const;
 
+        Vector3D operator + (Vector3D const &other) const;
         Vector3D operator - (Vector3D const &other) const;
+        Vector3D operator * (double const & scalar) const;
+        Vector3D operator / (double const & scalar) const;
 
         Vector3D normed() const;
         void norm();
@@ -38,6 +42,10 @@ namespace xru
     };
 
     void QuadraticSolver(const QuadraticCoef &coef, double *roots, int &numroots);
+
+    typedef struct {
+        unsigned value: 12;
+    } int12bit;
 
 }
 

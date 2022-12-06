@@ -21,9 +21,9 @@ def save_spectrum(out_filename:string, energies: list, photons: list) -> None:
         f.write("#define CONSTANTS_HPP\n\n")
         f.write("namespace xrc {\n\n")
 
-        energies_sting = "".join(["\t\t"+str(e)+",\n" for e in energies])
-        energies_sting = energies_sting[:-2]
-        f.write("\tstatic const double energies[] = {\n" + energies_sting + "\n\t};\n\n")
+        energies_string = "".join(["\t\t"+str(e)+",\n" for e in energies])
+        energies_string = energies_string[:-2]
+        f.write("\tstatic const double energies[] = {\n" + energies_string + "\n\t};\n\n")
 
         photons_string = "".join(["\t\t"+str(p)+",\n" for p in photons])
         photons_string = photons_string[:-2]
@@ -32,6 +32,24 @@ def save_spectrum(out_filename:string, energies: list, photons: list) -> None:
         f.write("} // namespace\n\n")
         f.write("#endif\n")
 
+def save_spectrum_map(out_filename:string, energies: list, photons: list) -> None:
+    with open(out_filename, 'w') as f:
+        f.write("#ifndef CONSTANTS_HPP\n")
+        f.write("#define CONSTANTS_HPP\n\n")
+        f.write("namespace xrc {\n\n")
+
+        f.write("\t// Key is energy, element is No. of photons\n")
+        f.write("\tstatic const std::map<double, double> spectrum = {\n")
+        spectras = ''
+        for e, p in zip(energies, photons):
+            spectras += "\t\t{" + str(e) + ", " + str(p) + "},\n"
+        spectras = spectras[:-2]
+        spectras += "\n"
+        f.write(spectras)
+        f.write("\t};\n")
+
+        f.write("\n} // namespace\n\n")
+        f.write("#endif\n")
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -45,4 +63,4 @@ if __name__ == "__main__":
         out_filename = sys.argv[3] + sys.argv[2]
 
     energies, photons = read_spectrum(in_filename)
-    save_spectrum(out_filename, energies, photons)
+    save_spectrum_map(out_filename, energies, photons)
