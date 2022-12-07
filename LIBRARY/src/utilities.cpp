@@ -38,7 +38,7 @@ namespace xru {
         return Vector3D(dx*scalar, dy*scalar, dz*scalar);
     }
 
-    Vector3D Vector3D::operator * (double const & scalar) const
+    Vector3D Vector3D::operator / (double const & scalar) const
     {
         return *this * (1/scalar);
     }

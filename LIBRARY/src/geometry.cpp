@@ -21,17 +21,17 @@ double Ellipsoid::weakening(const double path_length) const
 xru::QuadraticCoef* Ellipsoid::intersect_coefs(const xrt::XRay &ray) const
 {
     // Assuming this is non-zero:
-    auto divider = 1 / ((ray.d_.dz/c_)*(ray.d_.dz/c_) +
-                        (ray.d_.dy/b_)*(ray.d_.dy/b_) +
-                        (ray.d_.dx/a_)*(ray.d_.dx/a_));
+    auto divider = 1 / ((ray.direction_.dz/c_)*(ray.direction_.dz/c_) +
+                        (ray.direction_.dy/b_)*(ray.direction_.dy/b_) +
+                        (ray.direction_.dx/a_)*(ray.direction_.dx/a_));
 
     xru::QuadraticCoef* qc = new xru::QuadraticCoef();
-    qc->q = ((ray.o_.dz/c_)*(ray.o_.dz/c_) +
-             (ray.o_.dy/b_)*(ray.o_.dy/b_) + 
-             (ray.o_.dx/b_)*(ray.o_.dx/b_) ) * divider;
-    qc->phalf = ( (ray.o_.dz*ray.d_.dz/(c_*c_)) +
-                  (ray.o_.dy*ray.d_.dy/(b_*b_)) +
-                  (ray.o_.dx*ray.d_.dx/(a_*a_)) ) * divider;
+    qc->q = ((xrt::XRay::source_.dz/c_)*(xrt::XRay::source_.dz/c_) +
+             (xrt::XRay::source_.dy/b_)*(xrt::XRay::source_.dy/b_) + 
+             (xrt::XRay::source_.dx/b_)*(xrt::XRay::source_.dx/b_) ) * divider;
+    qc->phalf = ( (xrt::XRay::source_.dz*ray.direction_.dz/(c_*c_)) +
+                  (xrt::XRay::source_.dy*ray.direction_.dy/(b_*b_)) +
+                  (xrt::XRay::source_.dx*ray.direction_.dx/(a_*a_)) ) * divider;
 
     return qc;
 }
@@ -42,11 +42,11 @@ Sphere::Sphere(const double r, const double x, const double y, const double z):
 xru::QuadraticCoef* Sphere::intersect_coefs(const xrt::XRay &ray) const
 {
     // Assume line's direction vector is normalized and non-zero
-    auto delta = ray.o_ - centre_;
+    auto delta = xrt::XRay::source_ - centre_;
 
     xru::QuadraticCoef* qc = new xru::QuadraticCoef();
     qc->q = delta.dot(delta) - r_*r_;
-    qc->phalf = ray.d_.dot(delta);
+    qc->phalf = ray.direction_.dot(delta);
 
     return qc;
 }

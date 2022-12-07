@@ -10,7 +10,6 @@ namespace xrl {
         
         std::vector<xrt::XRay*> ray_field;
         std::vector<xrg::Body*> bodies;
-        xrt::Source* src;
         xrt::Detector* detect;
     };
 
