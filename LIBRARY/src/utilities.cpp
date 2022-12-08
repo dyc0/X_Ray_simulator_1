@@ -78,14 +78,14 @@ namespace xru {
         // Numercal stability possibly a problem.
         numroots     = 0;
         double delta = coef.phalf * coef.phalf - coef.q;
-        if (delta < double(0)) return;
+        if (delta < xrc::tolerance) return;
 
         delta           = std::sqrt(delta);
         roots[numroots] = -coef.phalf - delta;
-        numroots += (roots[numroots] > double(0));
+        numroots += (roots[numroots] > xrc::tolerance);
 
         roots[numroots] = -coef.phalf + delta;
-        numroots += (roots[numroots] > double(0));
+        numroots += (roots[numroots] > xrc::tolerance);
     }
 
 }

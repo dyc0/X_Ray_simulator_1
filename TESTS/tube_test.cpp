@@ -1,4 +1,5 @@
 #include "XRaySimulator.hpp"
+#include <fstream>
 
 using namespace xrt;
 
@@ -15,18 +16,18 @@ int main(int argc, char* argv[])
     // source coordinates
     double s_x, s_y, s_z;
 
-    if (argc == 16)
+    if (argc == 17)
     {
-        center = xru::Point3D(atof(argv[0]), atof(argv[1]), atof(argv[2]));
-        face = xru::Point3D(atof(argv[3]), atof(argv[4]), atof(argv[5]));
-        y_axis = xru::Point3D(atof(argv[6]), atof(argv[7]), atof(argv[8]));
-        x_cnt = atoi(argv[9]);
-        y_cnt = atoi(argv[10]);
-        px_w = atof(argv[11]);
-        px_h = atof(argv[12]);
-        s_x = atof(argv[13]);
-        s_y = atof(argv[14]);
-        s_z = atof(argv[15]);
+        center = xru::Point3D(atof(argv[1]), atof(argv[2]), atof(argv[3]));
+        face = xru::Point3D(atof(argv[4]), atof(argv[5]), atof(argv[6]));
+        y_axis = xru::Point3D(atof(argv[7]), atof(argv[8]), atof(argv[9]));
+        x_cnt = atoi(argv[10]);
+        y_cnt = atoi(argv[11]);
+        px_w = atof(argv[12]);
+        px_h = atof(argv[13]);
+        s_x = atof(argv[14]);
+        s_y = atof(argv[15]);
+        s_z = atof(argv[16]);
     }
     else
     {
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
         px_w = px_h = 2;
         s_x = s_y = s_z = 0;
     }
-
+    
     Detector* detector = Detector::create_detector(center, face, y_axis);
     detector->populate_pixels(x_cnt, y_cnt, px_w, px_h);
 
@@ -55,4 +56,15 @@ int main(int argc, char* argv[])
     for (auto ray: rays)
         std::cout << ray->direction_ << std::endl;
     std::cout << std::endl;
+
+    std::ofstream pixels_file("../HELPERS/sd_vis_data/pixels.txt");
+    for (auto px_pos: detector->pixels)
+        pixels_file << px_pos->center_position << std::endl;
+    pixels_file.close();
+
+    std::ofstream rays_file("../HELPERS/sd_vis_data/rays.txt");
+    for (auto ray: rays)
+        rays_file << ray->direction_ << std::endl;
+    rays_file.close();
+    
 }

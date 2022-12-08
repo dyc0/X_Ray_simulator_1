@@ -12,7 +12,7 @@ namespace xrt {
         XRay(const xru::Vector3D& d);
 
         xru::Vector3D direction_;
-        std::map<double, double> spectrum;
+        std::map<std::string, double> spectrum;
 
         // X-ray generation:
 

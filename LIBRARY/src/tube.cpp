@@ -55,13 +55,9 @@ void Detector::populate_pixels(const int x_number, const int y_number, const dou
     x_.norm();
     
     for (int dx = -x_number/2; dx <= x_number/2; dx++)
-        if (dx == 0) continue;
-        else
         for (int dy = -y_number/2; dy <= y_number/2; dy++)
-            if (dy == 0) continue;
-            else
             {
-                pixels.push_back(new Pixel(center_ + xru::Vector3D(x_ * px_width/2 * dx) + xru::Vector3D(y_ * px_height/2 * dy)));
+                pixels.push_back(new Pixel(center_ + xru::Vector3D(x_ * px_width/2 * (2*dx+1)) + xru::Vector3D(y_ * px_height/2 * 2*(dy+1))));
                 photon_count.push_back(0);
             }
     }

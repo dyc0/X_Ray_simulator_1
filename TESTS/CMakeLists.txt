@@ -3,6 +3,7 @@ list(APPEND tests
      utilities_test.cpp
      logic_test.cpp
      tube_test.cpp
+     geometry_test.cpp
     )
 
 # Enabling testing.

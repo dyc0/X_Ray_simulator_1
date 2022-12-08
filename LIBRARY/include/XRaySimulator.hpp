@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <math.h>
+#include <string>
 #include <vector>
 
 #include "constants.hpp"

@@ -38,11 +38,13 @@ def save_spectrum_map(out_filename:string, energies: list, photons: list) -> Non
         f.write("#define CONSTANTS_HPP\n\n")
         f.write("namespace xrc {\n\n")
 
+        f.write("\tconst static double tolerance = 1e-6;\n\n")
+
         f.write("\t// Key is energy, element is No. of photons\n")
-        f.write("\tstatic const std::map<double, double> spectrum = {\n")
+        f.write("\tstatic const std::map<std::string, double> spectrum = {\n")
         spectras = ''
         for e, p in zip(energies, photons):
-            spectras += "\t\t{" + str(e) + ", " + str(p) + "},\n"
+            spectras += "\t\t{\"" + str(e) + "\", " + str(p) + "},\n"
         spectras = spectras[:-2]
         spectras += "\n"
         f.write(spectras)
