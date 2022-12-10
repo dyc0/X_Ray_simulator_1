@@ -34,8 +34,8 @@ int main(int argc, char* argv[])
         center = xru::Point3D(2, 0, 0);
         face = xru::Vector3D(-1, 0, 0);
         y_axis = xru::Vector3D(0, 0, 1);
-        x_cnt = y_cnt = 2;
-        px_w = px_h = 2;
+        x_cnt = y_cnt = 380;
+        px_w = px_h = 0.5;
         s_x = s_y = s_z = 0;
     }
     

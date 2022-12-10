@@ -3,11 +3,16 @@
 
 using namespace xrg;
 
-Body::Body(const double x, const double y, const double z): centre_(x, y, z) { };
+Body::Body(const double x, const double y, const double z, int material): centre_(x, y, z), material_(material) { };
 
 xru::QuadraticCoef *xrg::Body::intersect_coefs(const xrt::XRay &ray) const
 {
     return nullptr;
+}
+
+void xrg::Body::set_material(const int material)
+{
+    material_ = material;
 }
 
 Ellipsoid::Ellipsoid(const double a, const double b, const double c, const double x, const double y, const double z) : a_(a), b_(b), c_(c), Body(x, y, z)
@@ -16,11 +21,6 @@ Ellipsoid::Ellipsoid(const double a, const double b, const double c, const doubl
     assert((a_ != 0));
     assert((b_ != 0));
     assert((c_ != 0));
-    }
-
-double Ellipsoid::weakening(const double path_length) const
-{
-    return 0;
 }
 
 void xrg::Ellipsoid::intersect(const xrt::XRay &ray, double *intersections, int& numintersections) const
@@ -69,12 +69,6 @@ xru::QuadraticCoef *Sphere::intersect_coefs(const xrt::XRay &ray) const
     return qc;
 }
 
-double Sphere::weakening(const double path_length) const
-{
-    return 0;
-}
-
-
 Cylinder::Cylinder(const double r, const double h, const double x, const double y, const double z): Body(x, y, z), h_(h), r_(r) { };
 
 void xrg::Cylinder::intersect(const xrt::XRay &ray, double *intersections, int& numintersections) const
@@ -112,5 +106,3 @@ xru::QuadraticCoef *Cylinder::intersect_coefs(const xrt::XRay &ray) const
 
     return qc;
 }
-
-double Cylinder::weakening(const double path_length) const { return 0; };

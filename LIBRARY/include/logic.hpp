@@ -6,21 +6,16 @@ namespace xrl {
     class Scene
     {
         public:
-        void generate_ray_field();
-        
-        std::vector<xrt::XRay*> ray_field;
-        std::vector<xrg::Body*> bodies;
-        xrt::Detector* detect;
-    };
+        Scene(const xru::Point3D& origin, xrt::Detector* detector);
+        void generate_ray_field(const xrt::Detector& detector);
+        void add_body(xrg::Body* body);
 
-    class Navigator
-    {
-        public:
+        void shoot_rays() const;
+        void traversing(std::list<std::pair<double, int>*>& entrances, std::list<std::pair<double, int>*>& exits, xrt::XRay* ray) const;
         
-
-        double intersect(const xrt::XRay& ray, const xrg::Sphere& sph) const;
-        double intersect(const xrt::XRay& ray, const xrg::Ellipsoid& ell) const;
-        double intersect(const xrt::XRay& ray, const xrg::Cylinder& ell) const;
+        std::vector<xrt::XRay*> rays_;
+        std::vector<xrg::Body*> bodies_;
+        xrt::Detector* detector_;
     };
 
 }

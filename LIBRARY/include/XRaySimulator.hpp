@@ -4,9 +4,11 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <list>
 #include <map>
 #include <math.h>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "constants.hpp"

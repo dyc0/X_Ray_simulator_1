@@ -17,7 +17,9 @@ namespace xrt {
         // X-ray generation:
 
         static void set_source(const xru::Point3D& origin);
-        static std::vector<XRay*> generate_rays(const Detector& detector);
+        static std::vector<XRay*>* generate_rays(const Detector& detector);
+
+        void weaken(const double path_length, const int material);
 
         static xru::Point3D source_;
     };

@@ -5,15 +5,17 @@ namespace xrg {
 
     class Body {
         public:
-        Body(const double x, const double y, const double z);
+        Body(const double x, const double y, const double z, int material = xrc::materials::VACUUM);
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const = 0;
-        virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const;
-        virtual double weakening(const double path_length) const = 0;
+        virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const = 0;
+
+        void set_material(const int material);
+
+        int material_;
 
         protected:
         xru::Point3D centre_;
-        double coef_; // For weakening
     };
 
     class Ellipsoid: public Body {
@@ -22,7 +24,6 @@ namespace xrg {
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
-        virtual double weakening(const double path_length) const override;
 
         private:
         double a_, b_, c_;
@@ -34,7 +35,6 @@ namespace xrg {
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
-        virtual double weakening(const double path_length) const override;
 
         private:
         double r_;
@@ -46,7 +46,6 @@ namespace xrg {
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
-        virtual double weakening(const double path_length) const override;
 
         private:
         double r_, h_;

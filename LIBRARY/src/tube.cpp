@@ -16,14 +16,14 @@ void XRay::set_source(const xru::Point3D& origin)
     XRay::source_ = origin;
 }
 
-std::vector<XRay*> XRay::generate_rays(const Detector& detector)
+std::vector<XRay*>* XRay::generate_rays(const Detector& detector)
 {
     assert(!detector.pixels.empty());
 
-    std::vector<XRay*> rays;
+    std::vector<XRay*>* rays = new std::vector<XRay*>();
 
     for (auto px: detector.pixels)
-        rays.push_back(new XRay((px->center_position - XRay::source_).normed()));
+        rays->push_back(new XRay((px->center_position - XRay::source_).normed()));
 
     return rays;
 }
@@ -54,10 +54,11 @@ void Detector::populate_pixels(const int x_number, const int y_number, const dou
     xru::Vector3D x_ = y_.cross(face_);
     x_.norm();
     
-    for (int dx = -x_number/2; dx <= x_number/2; dx++)
-        for (int dy = -y_number/2; dy <= y_number/2; dy++)
+    // TODO: Sort out edges
+    for (int dx = -x_number/2; dx < x_number/2; dx++)
+        for (int dy = -y_number/2; dy < y_number/2; dy++)
             {
-                pixels.push_back(new Pixel(center_ + xru::Vector3D(x_ * px_width/2 * (2*dx+1)) + xru::Vector3D(y_ * px_height/2 * 2*(dy+1))));
+                pixels.push_back(new Pixel(center_ + xru::Vector3D(x_ * px_width/2 * (2*dx+1)) + xru::Vector3D(y_ * px_height/2 * (2*dy+1))));
                 photon_count.push_back(0);
             }
     }

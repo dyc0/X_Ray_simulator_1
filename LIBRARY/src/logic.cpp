@@ -1,27 +1,83 @@
 #include "XRaySimulator.hpp"
+#include "logic.hpp"
 
 using namespace xrl;
 
-double Navigator::intersect(const xrt::XRay &ray, const xrg::Sphere& sph) const
+Scene::Scene(const xru::Point3D& origin, xrt::Detector* detector): detector_(detector)
 {
-    xru::QuadraticCoef* qc = sph.intersect_coefs(ray);
-    int numroots = 0;
-    double roots[2];
-    xru::QuadraticSolver(*qc, roots, numroots);
-
-    if (numroots == 0) return 0;
-    else if (numroots == 1) return roots[0];
-    else return roots[1] - roots[0];
+    xrt::XRay::set_source(origin);
 }
 
-double Navigator::intersect(const xrt::XRay &ray, const xrg::Ellipsoid& ell) const
+void xrl::Scene::generate_ray_field(const xrt::Detector &detector)
 {
-    xru::QuadraticCoef* qc = ell.intersect_coefs(ray);
-    int numroots = 0;
-    double roots[2];
-    xru::QuadraticSolver(*qc, roots, numroots);
+    rays_ = *xrt::XRay::generate_rays(detector);
+}
 
-    if (numroots == 0) return 0;
-    else if (numroots == 1) return roots[0];
-    else return roots[1] - roots[0];
+void xrl::Scene::add_body(xrg::Body *body) //TODO: material
+{
+    bodies_.push_back(body);
+}
+
+void xrl::Scene::shoot_rays() const
+{
+    std::list<std::pair<double, int>*> entrances, exits;
+    double intersections[2];
+    int numintersections, current_intersection = 0;
+
+    for (auto ray: rays_)
+    {
+        for (auto body: bodies_)
+        {
+            body->intersect(*ray, intersections, numintersections);
+            if (numintersections == 2)
+            {
+                entrances.push_back(new std::pair<double, int>(intersections[0], body->material_));
+                exits.push_back(new std::pair<double, int>(intersections[0], body->material_));
+                traversing(entrances, exits, ray);
+            }                      
+        }
+
+        entrances.clear();
+        exits.clear();
+    }
+}
+
+
+void xrl::Scene::traversing(std::list<std::pair<double, int>*> &entrances, std::list<std::pair<double, int>*> &exits, xrt::XRay* ray) const
+{
+    if (entrances.empty() || exits.empty()) return;
+
+    std::sort(entrances.begin(), entrances.end());
+    std::sort(exits.begin(), exits.end()); 
+
+    std::pair<double, int> * entrance, * exit;
+    bool is_exit = false, next_is_exit = false, first = true;
+
+
+    // it must enter into a body first.
+    entrance = entrances.front();
+    entrances.pop_front();
+
+    while (!entrances.empty() && !exits.empty())
+    {   
+        if (!first)
+        {
+            entrance = exit;
+            is_exit = next_is_exit;
+        }
+        else first = false;
+
+        if (entrances.front()->first < exits.front()->first - xrc::tolerance)
+        {
+            exit = entrances.front();
+            entrances.pop_front();
+            next_is_exit = false;
+        }
+        else
+        {
+            exit = exits.front();
+            exits.pop_front();
+            next_is_exit = true;
+        }
+    }
 }

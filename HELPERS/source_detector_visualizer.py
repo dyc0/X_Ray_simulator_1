@@ -2,6 +2,7 @@ from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 import string
 import numpy as np
+import math
 
 def read_3d_vectors(filename: string) -> list:
     vectors = []
@@ -22,7 +23,7 @@ if __name__ == '__main__':
 
     ax.scatter(pixels[:,0], pixels[:,1], pixels[:,2])
     
-    t = np.linspace(0, 20, 3)
+    t = np.linspace(0, math.sqrt(pixels[0,0]**2 + pixels[0,1]**2 + pixels[0,2]**2), 3)
     for ray in rays:
         x = ray[0]*t
         y = ray[1]*t
