@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     std::cout << std::endl;
 
     std::cout << "Ray directions: " << std::endl;
-    for (auto ray: rays)
+    for (auto ray: *rays)
         std::cout << ray->direction_ << std::endl;
     std::cout << std::endl;
 
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
     pixels_file.close();
 
     std::ofstream rays_file("../HELPERS/sd_vis_data/rays.txt");
-    for (auto ray: rays)
+    for (auto ray: *rays)
         rays_file << ray->direction_ << std::endl;
     rays_file.close();
     

@@ -3,6 +3,9 @@
 
 namespace xrl {
 
+    // (distance, (material, is_exit))
+    typedef std::pair<double, std::pair<int, bool>> traversal_info;
+
     class Scene
     {
         public:
@@ -11,7 +14,7 @@ namespace xrl {
         void add_body(xrg::Body* body);
 
         void shoot_rays() const;
-        void traversing(std::list<std::pair<double, int>*>& entrances, std::list<std::pair<double, int>*>& exits, xrt::XRay* ray) const;
+        void traversing(std::vector<traversal_info>& crossings, xrt::XRay* ray) const;
         
         std::vector<xrt::XRay*> rays_;
         std::vector<xrg::Body*> bodies_;

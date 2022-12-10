@@ -20,7 +20,7 @@ void xrl::Scene::add_body(xrg::Body *body) //TODO: material
 
 void xrl::Scene::shoot_rays() const
 {
-    std::list<std::pair<double, int>*> entrances, exits;
+    std::vector<traversal_info> crossings;
     double intersections[2];
     int numintersections, current_intersection = 0;
 
@@ -31,53 +31,31 @@ void xrl::Scene::shoot_rays() const
             body->intersect(*ray, intersections, numintersections);
             if (numintersections == 2)
             {
-                entrances.push_back(new std::pair<double, int>(intersections[0], body->material_));
-                exits.push_back(new std::pair<double, int>(intersections[0], body->material_));
-                traversing(entrances, exits, ray);
+                crossings.push_back(traversal_info(intersections[0], std::pair<int, bool> (body->material_, false)));
+                crossings.push_back(traversal_info(intersections[1], std::pair<int, bool> (body->material_, true)));
             }                      
         }
-
-        entrances.clear();
-        exits.clear();
+        traversing(crossings, ray);
+        crossings.clear();
+        
     }
 }
 
 
-void xrl::Scene::traversing(std::list<std::pair<double, int>*> &entrances, std::list<std::pair<double, int>*> &exits, xrt::XRay* ray) const
+void xrl::Scene::traversing(std::vector<traversal_info> &crossings, xrt::XRay* ray) const
 {
-    if (entrances.empty() || exits.empty()) return;
+    if (crossings.empty()) return;
 
-    std::sort(entrances.begin(), entrances.end());
-    std::sort(exits.begin(), exits.end()); 
+    std::sort(crossings.begin(), crossings.end());
 
-    std::pair<double, int> * entrance, * exit;
-    bool is_exit = false, next_is_exit = false, first = true;
-
-
-    // it must enter into a body first.
-    entrance = entrances.front();
-    entrances.pop_front();
-
-    while (!entrances.empty() && !exits.empty())
-    {   
-        if (!first)
-        {
-            entrance = exit;
-            is_exit = next_is_exit;
-        }
-        else first = false;
-
-        if (entrances.front()->first < exits.front()->first - xrc::tolerance)
-        {
-            exit = entrances.front();
-            entrances.pop_front();
-            next_is_exit = false;
-        }
-        else
-        {
-            exit = exits.front();
-            exits.pop_front();
-            next_is_exit = true;
-        }
+    double path_length = 0, material = -1;
+    std::vector<traversal_info>::iterator it1 = crossings.begin();
+    std::vector<traversal_info>::iterator it2 = it1 + 1;
+    for (; it2 != crossings.end(); it1++, it2++)
+    {
+        path_length = it2->first - it1->first;
+        material = (it1->second.second) ? it2->second.first : it1->second.first;
+        ray->weaken(path_length, material);
     }
+    
 }

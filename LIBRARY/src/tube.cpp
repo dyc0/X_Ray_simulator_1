@@ -1,4 +1,5 @@
 #include "XRaySimulator.hpp"
+#include "tube.hpp"
 
 using namespace xrt;
 
@@ -28,6 +29,9 @@ std::vector<XRay*>* XRay::generate_rays(const Detector& detector)
     return rays;
 }
 
+void xrt::XRay::weaken(const double path_length, const int material)
+{
+}
 
 Pixel::Pixel(const xru::Point3D& center): center_position(center) { };
 
