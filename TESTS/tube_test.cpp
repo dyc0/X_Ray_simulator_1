@@ -3,8 +3,6 @@
 
 using namespace xrt;
 
-// TODO: Visualize system using python script.
-
 int main(int argc, char* argv[])
 {
     // center, face and y-axis of detector

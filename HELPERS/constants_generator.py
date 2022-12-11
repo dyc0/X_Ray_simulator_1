@@ -25,6 +25,21 @@ def get_map(keys: list, values: list, name:str, type1:str, type2:str, comment:st
 
     return dict
 
+def get_list(elements: list, name:str, type:str, comment:str) -> string:
+    container = ""
+
+    container += "\t// " + comment + "\n"
+    container += "\tstatic const std::vector<" + type + "> " + name + " = {\n"
+    elements_str = ''
+    for e in elements:
+        elements_str += "\t\t" + str(e) + ",\n"
+    elements_str = elements_str[:-2]
+    elements_str += "\n"
+    container += elements_str
+    container += "\t};\n"
+
+    return container
+
 if __name__ == '__main__':
     argument_list = sys.argv[1:]
     options = "k:d:f:s:m:t:o:"
@@ -76,22 +91,26 @@ if __name__ == '__main__':
         tolerance_string = "\tconst static double tolerance = " + tolerance + ";\n\n"
         of.write(tolerance_string)
 
-        source = get_map(energies, photons, "spectrum", "std::string", "double", "Key is energy, element is No. of photons")
-        of.write(source)
+        source_e = get_list(energies, "energies", "double", "Possible energies of photons")
+        of.write(source_e)
+        of.write("\n\n")
+
+        source_s = get_list(photons, "spectrum", "double", "Photon count per energy value")
+        of.write(source_s)
         of.write("\n\n")
 
         keys_pointers = []
         materials_enum = "enum materials { "
         for key in materials.keys():
             keys_pointers.append("&" + key)
-            attenuation = get_map(energies, materials[key], key, "std::string", "double", key + " material")
+            attenuation = get_list(materials[key], key, "double", key + " material")
             of.write(attenuation)
             of.write("\n")
 
             materials_enum += key.upper() + ", "
         materials_enum += "VACUUM = -1 };"
 
-        keys = get_map(np.arange(0, len(materials.keys())), keys_pointers, "materials", "int", "const std::map<std::string, double>*", "Map of all materials")
+        keys = get_map(np.arange(0, len(materials.keys())), keys_pointers, "materials_keys", "int", "const std::vector<double>*", "Map of all materials")
         of.write(keys)
         of.write("\n\t" + materials_enum + "\n")
         of.write("\n")

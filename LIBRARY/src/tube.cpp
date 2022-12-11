@@ -31,6 +31,14 @@ std::vector<XRay*>* XRay::generate_rays(const Detector& detector)
 
 void xrt::XRay::weaken(const double path_length, const int material)
 {
+    if (material == -1) return;
+
+    std::vector<double>::iterator si = spectrum.begin();
+    std::vector<double>::const_iterator mi = (*xrc::materials_keys.at(material)).begin();
+    for (; si != spectrum.end(); si++)
+    {
+        *si = *si * exp(- *mi * path_length);
+    }
 }
 
 Pixel::Pixel(const xru::Point3D& center): center_position(center) { };

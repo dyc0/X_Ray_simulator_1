@@ -5,7 +5,7 @@ using namespace xrl;
 int main(int argc, const char* argv[])
 {
     xrt::Detector* det = xrt::Detector::create_detector(xru::Point3D(4, 0, 0), xru::Vector3D(-1, 0, 0), xru::Vector3D(0, 0, 1));
-    det->populate_pixels(2, 2, 1, 1);
+    det->populate_pixels(380, 380, 1, 1);
 
     Scene* sc = new Scene(xru::Vector3D(0,0,0), det);
 
