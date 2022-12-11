@@ -7,6 +7,7 @@
 #include <list>
 #include <map>
 #include <math.h>
+#include <stack>
 #include <string>
 #include <utility>
 #include <vector>

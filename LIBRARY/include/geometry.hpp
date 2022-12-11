@@ -9,6 +9,7 @@ namespace xrg {
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const = 0;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const = 0;
+        virtual void print(std::ostream& where) const;
 
         void set_material(const int material);
 
@@ -18,12 +19,16 @@ namespace xrg {
         xru::Point3D centre_;
     };
 
+    std::ostream& operator<<(std::ostream& out, const Body& o);
+
     class Ellipsoid: public Body {
         public:
         Ellipsoid(const double a, const double b, const double c, const double x, const double y, const double z);
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
+
+        virtual void print(std::ostream& where) const override;
 
         private:
         double a_, b_, c_;
@@ -36,6 +41,8 @@ namespace xrg {
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
 
+        virtual void print(std::ostream& where) const override;
+
         private:
         double r_;
     };
@@ -46,6 +53,9 @@ namespace xrg {
 
         virtual void intersect(const xrt::XRay &ray, double* intersections, int& numintersections) const override;
         virtual xru::QuadraticCoef* intersect_coefs(const xrt::XRay &ray) const override;
+        bool planar_face_intersect(const xrt::XRay &ray, double* intersections, int& numintersections, const int side) const;
+
+        virtual void print(std::ostream& where) const override;
 
         private:
         double r_, h_;

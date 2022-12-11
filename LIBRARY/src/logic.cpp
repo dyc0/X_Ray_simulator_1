@@ -8,9 +8,9 @@ Scene::Scene(const xru::Point3D& origin, xrt::Detector* detector): detector_(det
     xrt::XRay::set_source(origin);
 }
 
-void xrl::Scene::generate_ray_field(const xrt::Detector &detector)
+void xrl::Scene::generate_ray_field()
 {
-    rays_ = *xrt::XRay::generate_rays(detector);
+    rays_ = *xrt::XRay::generate_rays(*detector_);
 }
 
 void xrl::Scene::add_body(xrg::Body *body) //TODO: material
@@ -37,7 +37,6 @@ void xrl::Scene::shoot_rays() const
         }
         traversing(crossings, ray);
         crossings.clear();
-        
     }
 }
 
@@ -48,14 +47,18 @@ void xrl::Scene::traversing(std::vector<traversal_info> &crossings, xrt::XRay* r
 
     std::sort(crossings.begin(), crossings.end());
 
-    double path_length = 0, material = -1;
+    double path_length = 0;
+    std::stack<int> material;
+    material.push(-1);
     std::vector<traversal_info>::iterator it1 = crossings.begin();
     std::vector<traversal_info>::iterator it2 = it1 + 1;
     for (; it2 != crossings.end(); it1++, it2++)
     {
         path_length = it2->first - it1->first;
-        material = (it1->second.second) ? it2->second.first : it1->second.first;
-        ray->weaken(path_length, material);
+        
+        if (!it1->second.second) material.push(it1->second.first);
+        else material.pop();
+        ray->weaken(path_length, material.top());
     }
     
 }

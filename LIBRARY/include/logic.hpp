@@ -10,7 +10,7 @@ namespace xrl {
     {
         public:
         Scene(const xru::Point3D& origin, xrt::Detector* detector);
-        void generate_ray_field(const xrt::Detector& detector);
+        void generate_ray_field();
         void add_body(xrg::Body* body);
 
         void shoot_rays() const;
