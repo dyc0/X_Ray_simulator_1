@@ -11,6 +11,9 @@ namespace xrt {
         public:
         XRay(const xru::Vector3D& d);
 
+        void weaken(const double path_length, const int material);
+        double sum_photons() const;
+
         xru::Vector3D direction_;
         std::vector<double> spectrum;
 
@@ -19,8 +22,6 @@ namespace xrt {
         static void set_source(const xru::Point3D& origin);
         static std::vector<XRay*>* generate_rays(const Detector& detector);
 
-        void weaken(const double path_length, const int material);
-
         static xru::Point3D source_;
     };
 
@@ -28,7 +29,8 @@ namespace xrt {
         Pixel(const xru::Point3D& center);
 
         xru::Point3D center_position;
-        xru::int12bit photons; //TODO: 12-bit
+        double intensity;
+        unsigned int photons: 12;
     };
 
     class Detector
@@ -41,10 +43,12 @@ namespace xrt {
         static Detector* create_detector(const xru::Point3D& center, const xru::Vector3D& face_direction, const xru::Vector3D& local_y_axis);
         void populate_pixels(const int x_number, const int y_number, const double px_width, const double px_height);
 
+        void update_pixel(int px_index, xrt::XRay* ray);
+
         static Detector* instance_ptr;
         std::vector<Pixel*> pixels;
-        std::vector<int> photon_count;
         xru::Vector3D center_, face_, y_;
+        int npixels_x_, npixels_y_;
     };
 
 }

@@ -1377,6 +1377,20 @@ namespace xrc {
 		{9, &breast}
 	};
 
+	// Densities of materials
+	static const std::vector<double> material_densities = {
+		1.05,
+		0.95,
+		1.05,
+		1.04,
+		1.07,
+		1.04,
+		1.92,
+		1.06,
+		1.05,
+		1.02
+	};
+
 	enum materials { OVARY, ADIPOSE, LUNG, TESTIS, LENS, BRAIN, BONE, BLOOD, MUSCLE, BREAST, VACUUM = -1 };
 
 } // namespace

@@ -43,10 +43,6 @@ namespace xru
 
     void QuadraticSolver(const QuadraticCoef &coef, double *roots, int &numroots);
 
-    typedef struct {
-        unsigned value: 12;
-    } int12bit;
-
 }
 
 #endif

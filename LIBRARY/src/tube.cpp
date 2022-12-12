@@ -35,17 +35,24 @@ void xrt::XRay::weaken(const double path_length, const int material)
 
     std::vector<double>::iterator si = spectrum.begin();
     std::vector<double>::const_iterator mi = (*xrc::materials_keys.at(material)).begin();
-    for (; si != spectrum.end(); si++)
+    for (; si != spectrum.end(); si++, mi++)
     {
-        *si = *si * exp(- *mi * path_length);
+        *si = *si * exp(- *mi * path_length * xrc::material_densities[material]);
     }
+}
+
+double xrt::XRay::sum_photons() const
+{
+    double sum = 0;
+    for (auto ph_count: spectrum) sum += ph_count;
+    return sum;
 }
 
 Pixel::Pixel(const xru::Point3D& center): center_position(center) { };
 
 
 Detector::Detector(const xru::Point3D& center, const xru::Vector3D& face_direction, const xru::Vector3D& local_y_axis):
-    center_(center), face_(face_direction.normed()), y_(local_y_axis.normed()) { };
+    center_(center), face_(face_direction.normed()), y_(local_y_axis.normed()), npixels_x_(0), npixels_y_(0) { };
 
 Detector * Detector::create_detector(const xru::Point3D &center, const xru::Vector3D &face_direction, const xru::Vector3D &local_y_axis)
 {
@@ -63,6 +70,9 @@ void Detector::populate_pixels(const int x_number, const int y_number, const dou
 {
     assert((x_number % 2 == 0) && (y_number % 2 == 0));
 
+    npixels_x_ = x_number;
+    npixels_y_ = y_number;
+
     xru::Vector3D x_ = y_.cross(face_);
     x_.norm();
     
@@ -71,6 +81,11 @@ void Detector::populate_pixels(const int x_number, const int y_number, const dou
         for (int dy = -y_number/2; dy < y_number/2; dy++)
             {
                 pixels.push_back(new Pixel(center_ + xru::Vector3D(x_ * px_width/2 * (2*dx+1)) + xru::Vector3D(y_ * px_height/2 * (2*dy+1))));
-                photon_count.push_back(0);
             }
+    }
+
+    void xrt::Detector::update_pixel(int px_index, xrt::XRay* ray)
+    {
+        pixels[px_index]->photons = static_cast<int>(ray->sum_photons());
+        pixels[px_index]->intensity = ray->sum_photons();
     }

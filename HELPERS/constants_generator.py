@@ -52,6 +52,9 @@ if __name__ == '__main__':
     materials_path = "materials_data/attenuations"
     tolerance = "1e-6"
     output_file = "../LIBRARY/include/constants.hpp"
+
+    mAs = 100
+    surface = 0.1*0.2
     
     try:
         arguments, values = getopt.getopt(argument_list, options, long_options)
@@ -95,6 +98,7 @@ if __name__ == '__main__':
         of.write(source_e)
         of.write("\n\n")
 
+        #for i in range(len(photons)): photons[i] = photons[i] * energies[i] * mAs * surface
         source_s = get_list(photons, "spectrum", "double", "Photon count per energy value")
         of.write(source_s)
         of.write("\n\n")
@@ -112,10 +116,13 @@ if __name__ == '__main__':
 
         keys = get_map(np.arange(0, len(materials.keys())), keys_pointers, "materials_keys", "int", "const std::vector<double>*", "Map of all materials")
         of.write(keys)
+
+        densities = [1.050, 9.500e-01, 1.050, 1.040, 1.070, 1.040, 1.920, 1.060, 1.050, 1.020]
+        densities_str = get_list(densities, "material_densities", "double", "Densities of materials")
+        of.write("\n" + densities_str)
+
         of.write("\n\t" + materials_enum + "\n")
         of.write("\n")
-
-        
 
 
         of.write("} // namespace\n\n#endif")

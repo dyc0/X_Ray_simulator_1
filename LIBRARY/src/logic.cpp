@@ -23,6 +23,7 @@ void xrl::Scene::shoot_rays() const
     std::vector<traversal_info> crossings;
     double intersections[2];
     int numintersections, current_intersection = 0;
+    int px_index = 0;
 
     for (auto ray: rays_)
     {
@@ -36,7 +37,9 @@ void xrl::Scene::shoot_rays() const
             }                      
         }
         traversing(crossings, ray);
+        detector_->update_pixel(px_index, ray);
         crossings.clear();
+        px_index ++;
     }
 }
 
@@ -61,4 +64,23 @@ void xrl::Scene::traversing(std::vector<traversal_info> &crossings, xrt::XRay* r
         ray->weaken(path_length, material.top());
     }
     
+}
+
+void xrl::Scene::write_to_file(const std::string &filename) const
+{
+    std::ofstream results;
+    try { results.open(filename, std::ios::out); }
+    catch (...) { std::cerr << "Error opening file " << filename << "." << std::endl; }
+
+    std::string row_data;
+    for (int row = 0; row < detector_->npixels_y_; row++)
+    {   
+        row_data = "";
+        for (int column = 0; column < detector_->npixels_x_; column++)
+            row_data.append(std::to_string(detector_->pixels[row*detector_->npixels_x_ + column]->intensity)).append(" ");
+        row_data.pop_back();
+        results << row_data << std::endl;
+    }
+
+    results.close();
 }

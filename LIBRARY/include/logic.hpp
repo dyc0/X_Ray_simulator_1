@@ -15,6 +15,8 @@ namespace xrl {
 
         void shoot_rays() const;
         void traversing(std::vector<traversal_info>& crossings, xrt::XRay* ray) const;
+
+        void write_to_file(const std::string& filename) const;
         
         std::vector<xrt::XRay*> rays_;
         std::vector<xrg::Body*> bodies_;
