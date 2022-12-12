@@ -29,7 +29,7 @@ namespace xrt {
         Pixel(const xru::Point3D& center);
 
         xru::Point3D center_position;
-        double intensity;
+        // double intensity;
         unsigned int photons: 12;
     };
 

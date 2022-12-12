@@ -81,6 +81,11 @@ if __name__ == '__main__':
         tube_deg + "deg_" + tube_flt + ".txt")
     energies, photons = read_spectrum(spectrum_filename)
 
+    # Normalization for 12-bit
+    maxphotons = np.sum(photons)
+    maxconst = 2**12-1
+    for i in range(len(photons)): photons[i] = photons[i]/maxphotons * maxconst
+
     materials = {}
     energies_MeV = [e*0.001 for e in energies]
     for filename in os.listdir(materials_path):
@@ -117,7 +122,7 @@ if __name__ == '__main__':
         keys = get_map(np.arange(0, len(materials.keys())), keys_pointers, "materials_keys", "int", "const std::vector<double>*", "Map of all materials")
         of.write(keys)
 
-        densities = [1.050, 9.500e-01, 1.050, 1.040, 1.070, 1.040, 1.920, 1.060, 1.050, 1.020]
+        densities = [1.050, 9.500e-01, 1.050, 1.040, 1.070, 1.040, 1.920, 1.060, 1.050, 1.020, 1]
         densities_str = get_list(densities, "material_densities", "double", "Densities of materials")
         of.write("\n" + densities_str)
 

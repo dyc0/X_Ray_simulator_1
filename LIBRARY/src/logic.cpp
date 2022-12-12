@@ -77,7 +77,7 @@ void xrl::Scene::write_to_file(const std::string &filename) const
     {   
         row_data = "";
         for (int column = 0; column < detector_->npixels_x_; column++)
-            row_data.append(std::to_string(detector_->pixels[row*detector_->npixels_x_ + column]->intensity)).append(" ");
+            row_data.append(std::to_string(detector_->pixels[row*detector_->npixels_x_ + column]->photons)).append(" ");
         row_data.pop_back();
         results << row_data << std::endl;
     }

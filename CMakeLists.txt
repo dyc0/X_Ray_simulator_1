@@ -29,3 +29,6 @@ list(APPEND XR_LIBS XRaySimulator)
 if(ENABLE_TESTING)
   add_subdirectory(TESTS)
 endif()
+
+add_executable(solution solution.cpp)
+target_link_libraries(solution ${XR_LIBS} compiler_flags)
